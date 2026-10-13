@@ -30,7 +30,7 @@ Open the folder in your coding agent and ask for /weekly-review. PGlite stores l
 
 Maintain the pricebook, check product bundles, review discounts, prepare quote drafts and follow up before expiry. The fictional Harbour demo includes an expired quote, a missing commissioning component, stale customer contact, a discount needing review and a clean quote ready for approval. Seed dates are relative to the first run; reseeding preserves changes.
 
-The database has nine record sets and four read-only views. The CLI has 33 commands, including help, and .claude/commands has 34 recipes. [Complete syntax](docs/cli.md).
+The database has nine record sets and five read-only database views. The CLI has 33 commands, including help, and .claude/commands has 34 recipes. [Complete syntax](docs/cli.md).
 
 ## Ten questions for your quote meeting
 
