@@ -1,0 +1,3 @@
+Id,Name,ProductCode,IsActive
+01tA,Exported gateway,IMP-GATEWAY,true
+01tB,"Exported sensor, indoor",IMP-SENSOR,true

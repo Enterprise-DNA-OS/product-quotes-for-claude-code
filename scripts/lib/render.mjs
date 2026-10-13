@@ -20,7 +20,7 @@ export function esc(v) {
 export function table(rows, columns = null) {
   if (!rows || !rows.length) return '<p class="empty">Nothing here.</p>';
   const cols = columns || Object.keys(rows[0]);
-  const head = cols.map((c) => `<th>${esc(c.replace(/_cents$/, '').replace(/_/g, ' '))}</th>`).join('');
+  const head = cols.map((c) => `<th>${esc(c.replace(/_cents$/, '').replace(/_bps$/, ' %').replace(/_/g, ' '))}</th>`).join('');
   const body = rows.map((r) => `<tr>${cols.map((c) => `<td${/^\d{4}-\d{2}-\d{2}$/.test(String(r[c])) ? ' class="date-cell"' : ''}>${esc(fmt(r[c], c, r))}</td>`).join('')}</tr>`).join('');
   return `<div class="table-scroll"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
@@ -28,6 +28,7 @@ export function table(rows, columns = null) {
 function fmt(v, key, row) {
   if (v === null || v === undefined) return '';
   if (v instanceof Date) return v.toISOString().replace('T', ' ').replace('.000Z', ' UTC');
+  if (key.endsWith('_bps')) return `${(Number(v) / 100).toFixed(2)}%`;
   if (key.endsWith('_cents')) return `${row.currency || ''} ${(Number(v) / 100).toFixed(2)}`.trim();
   if (typeof v === 'object') return JSON.stringify(v);
   if (typeof v === 'number' && !Number.isInteger(v)) return v.toFixed(2);

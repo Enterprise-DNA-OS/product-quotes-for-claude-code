@@ -1,13 +1,30 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Product Quotes for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Product quoting week",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select * from quote_attention order by name"
+      },
+      {
+        "title": "Discount decisions",
+        "sql": "select name,owner,currency,net_cents,margin_cents,max_discount_bps from quote_totals where max_discount_bps>1000 order by name"
+      },
+      {
+        "title": "Bundle gaps",
+        "sql": "select name,bundle,missing_sku,missing_quantity from bundle_gaps order by name"
+      }
+    ]
+  },
+  {
+    "name": "compliance",
+    "title": "Quote review exceptions",
+    "sections": [
+      {
+        "title": "Record checks",
+        "sql": "select name,rule,finding from compliance_findings order by name,rule",
+        "note": "Record checks for the responsible operator. Not legal certification."
       }
     ]
   }

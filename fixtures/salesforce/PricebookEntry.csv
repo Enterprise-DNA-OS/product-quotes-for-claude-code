@@ -1,0 +1,3 @@
+Id,Pricebook2Id,Product2Id,UnitPrice,IsActive,CurrencyIsoCode
+01uA,01sA,01tA,500.25,true,NZD
+01uB,01sA,01tB,100.00,true,NZD

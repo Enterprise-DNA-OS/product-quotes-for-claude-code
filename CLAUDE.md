@@ -1,43 +1,51 @@
-# Product Quotes for Claude Code: operating instructions
+# Product Quotes for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+For sales operators selling configurable products. Read the CLI records before answering. The Harbour demo is fictional. The CLI is the only recurring action path.
 
-## Who this is for
+Nothing here sends, signs, invoices, charges or records customer acceptance. Draft documents are drafts. mark-issued only records an operator statement about a past action elsewhere. Costs, tax rates, scope and reasons must come from the operator. Never guess them.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+Every quote edit invalidates approval. Issued quotes require revise before changes. Import standard Salesforce exports as drafts. Read docs/replace-salesforce-revenue-cloud.md before promising migration. Read docs/compliance.md before explaining a check. Operator labels are not signatures or authenticated roles.
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+## Recurring jobs
 
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Job | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| catalog | /catalog |
+| pricebooks | /pricebooks |
+| quotes | /quotes |
+| discount review | /discount-review |
+| expiring | /expiring |
+| bundle check | /bundle-check |
+| margin review | /margin-review |
+| owner workload | /owner-workload |
+| price drift | /price-drift |
+| attention | /attention |
+| compliance | /compliance |
+| activity | /activity |
+| approvals | /approvals |
+| quote | /quote |
+| weekly review | /weekly-review |
+| add product | /add-product |
+| cost review | /cost-review |
+| add pricebook | /add-pricebook |
+| set price | /set-price |
+| bundle rule | /bundle-rule |
+| new quote | /new-quote |
+| add line | /add-line |
+| discount | /discount |
+| terms | /terms |
+| approve | /approve |
+| mark issued | /mark-issued |
+| revise | /revise |
+| log | /log |
+| draft quote | /draft-quote |
+| import | /import |
+| export | /export |
+| Customise a rule or field | /customise |
+| Add a read-only view | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+Run node scripts/quotes.mjs help for syntax. Every command accepts --json. Use partial IDs or case-insensitive names. Ambiguity lists candidates and exits 1. Never choose a candidate silently.
 
-## Hard rules
+Use brand.json for business name, logo and colours. Keep real records out of Git. drafts/, docs-out/, views/, exports/ and .data/ are ignored. Local operation supports one process at a time. Shared deployment requires authentication, least-privilege database access and tested backups. The supplied CLI uses a trusted database owner connection, never expose it to browsers.
 
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off Salesforce Revenue Cloud.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/salesforce-revenue-cloud
+Omni by Enterprise DNA customises and runs your version: https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=salesforce-revenue-cloud&utm_source=github&utm_medium=instructions

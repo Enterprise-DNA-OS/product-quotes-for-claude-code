@@ -1,18 +1,10 @@
 node_modules/
 .data/
 .env
-.env.*
-!.env.example
+.env.local
 drafts/*
 !drafts/.gitkeep
-*.log
-.DS_Store
-Thumbs.db
-views/*.html
 docs-out/
-feeds/
-
-# Private exports and import staging files
+views/
 exports/
-imports/
-private-*.json
+*.log

@@ -1,11 +1,43 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "quote",
+    "title": "DRAFT product quote",
+    "for_each": "select id,name from quotes order by name",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Customer and scope",
+        "sql": "select customer,name,revision,status,expires,terms,tax_note from quotes where id=$1",
+        "note": "Draft for review. Not an invoice. No acceptance or dispatch is performed."
+      },
+      {
+        "title": "Quoted items",
+        "sql": "select l.sku,l.product,l.quantity,l.discount_bps,b.currency,l.unit_cents,l.net_cents from line_totals l join quotes q on q.id=l.quote_id join pricebooks b on b.id=q.pricebook_id where l.quote_id=$1 order by l.sku"
+      },
+      {
+        "title": "Total including recorded tax",
+        "sql": "select currency,net_cents,tax_cents,total_cents from quote_totals where id=$1"
+      }
+    ]
+  },
+  {
+    "name": "approval-brief",
+    "title": "Internal quote approval brief",
+    "for_each": "select id,name from quotes order by name",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Margin and discount",
+        "sql": "select name,revision,owner,currency,net_cents,margin_cents,unknown_costs,max_discount_bps from quote_totals where id=$1"
+      },
+      {
+        "title": "Review findings",
+        "sql": "select rule,finding from compliance_findings where quote_id=$1"
+      },
+      {
+        "title": "Approval history",
+        "sql": "select revision,actor,reason,created_at from approvals where quote_id=$1 order by created_at"
+      }
     ]
   }
 ]

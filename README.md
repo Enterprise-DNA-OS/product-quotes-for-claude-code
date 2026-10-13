@@ -1,115 +1,88 @@
-<h1 align="center">Product Quotes for Claude Code</h1>
+# Product Quotes for Claude Code
 
-<p align="center">
-  <strong>The open-source product quoting system that is just a database and Claude Code.</strong>
-</p>
+Product bundles, pricebooks, discount decisions and quote revisions in a database you own. Use Claude Code, Codex, OpenCode or Cursor with the same records and recipes.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free. Install, try the fictional demo and import supported Salesforce exports. | Your product rules, approval process, quote layout and migration mapping. | Installed, connected and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
+| [Quick start](#quick-start) | [Get your version built](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=salesforce-revenue-cloud&utm_source=github&utm_medium=customise) | [Book a call](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=salesforce-revenue-cloud&utm_source=github&utm_medium=managed) |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your Salesforce Revenue Cloud data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=salesforce-revenue-cloud">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/salesforce-revenue-cloud?utm_source=github&utm_medium=readme&utm_campaign=salesforce-revenue-cloud">How it works</a></td>
-  </tr>
-</table>
-
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-salesforce-revenue-cloud">Instead of Salesforce Revenue Cloud</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Product Quotes for Claude Code does the job you pay Salesforce Revenue Cloud for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the Salesforce Revenue Cloud dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays Salesforce Revenue Cloud per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=salesforce-revenue-cloud).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+Salesforce lists Revenue Cloud Advanced at US$200 per user per month billed annually. That implies US$60,000 a year for 25 users before Sales Cloud, a list-price scenario rather than a customer invoice. [Vendor pricing](https://www.salesforce.com/sales/revenue-lifecycle-management/pricing/), checked 13 October 2026. [Selection and six scores](docs/research.md).
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later, Windows or Linux:
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/product-quotes-for-claude-code.git
 cd product-quotes-for-claude-code
 npm install
 npm run demo
+npm test
+npm run quotes -- attention
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Open the folder in your coding agent and ask for /weekly-review. PGlite stores local data in .data/db. DATABASE_URL selects Postgres with verified TLS for remote connections. Use a separate empty DATA_DIR and migrate without seed for your own records. No external model API or Salesforce connection is required to run the demo.
 
-### Use it with your own Postgres or Supabase
+## The five weekly jobs
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+Maintain the pricebook, check product bundles, review discounts, prepare quote drafts and follow up before expiry. The fictional Harbour demo includes an expired quote, a missing commissioning component, stale customer contact, a discount needing review and a clean quote ready for approval. Seed dates are relative to the first run; reseeding preserves changes.
 
-## The commands
+The database has nine record sets and four read-only views. The CLI has 32 commands, including help, and .claude/commands has 33 recipes. [Complete syntax](docs/cli.md).
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+## Ten questions for your quote meeting
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+These are implemented analyses, not claims that Salesforce cannot answer them after configuration.
 
-## Instead of salesforce-revenue-cloud
+1. Which quotes expire within a week, including ones already overdue? `expiring`
+2. Which quotes have had no customer contact for more than fourteen days? `attention`
+3. Which discounts exceed our review threshold? `discount-review`
+4. Which bundles lack a required component, and how many? `bundle-check`
+5. What margin remains after the discount on each quote? `margin-review`
+6. Which quoted prices differ from today's pricebook? `price-drift`
+7. Which owners carry the most open quoted value, separately by currency? `owner-workload`
+8. Which quotes lack costs, scope or a tax explanation? `compliance`
+9. Who approved each revision and why? `approvals`
+10. What changed between the issued quote and the current revision? `activity`
 
-<!-- TODO(author): how to bring data across from Salesforce Revenue Cloud; link docs/replace-salesforce-revenue-cloud.md -->
+## Your first hour: ten things to ask for
 
-## Architecture
+1. Put our business name, logo and colours on quote drafts.
+2. Show the expired quotes first.
+3. Explain the margin on HQ-101.
+4. Show what is missing from the Southern bundle.
+5. Add a product and its price to our NZ pricebook.
+6. Draft a quote without sending it.
+7. Record a reviewed cost in the quote currency.
+8. Preview our Salesforce export before importing it.
+9. Add a delivery-region field through a new migration.
+10. Add a Monday view for one sales owner.
 
+## Documents and views
+
+brand.json controls printable quote drafts, internal approval briefs and weekly read-only views. npm run docs writes paperwork to docs-out/. npm run view writes dashboards to views/. /draft-quote writes a selected draft under drafts/. Customer quote drafts omit internal costs and approval reasons. Every document remains a draft for human review.
+
+Quotes hold price and cost snapshots. Catalogue changes do not reprice existing quotes. Edits save a snapshot, increment the revision and invalidate approval. Issued quotes are frozen until explicitly revised. Bundle and record checks run again before recording issue. The /compliance checks cite NZ and Australian guidance and distinguish internal policy from legal requirements. [Rules and limits](docs/compliance.md).
+
+## Bring your records
+
+```bash
+npm run quotes -- import salesforce --dir=/path/to/export --currency=NZD --actor="Migration operator" --dry-run
+npm run quotes -- import salesforce --dir=/path/to/export --currency=NZD --actor="Migration operator"
 ```
-product-quotes-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
 
-## Built for coding agents
+The one-command importer accepts standard Product2, Pricebook2 and PricebookEntry exports, with optional Account, Quote and QuoteLineItem exports. It preserves source fields and rolls back invalid batches. Repeating the same import does nothing; changed source IDs require reconciliation. Imported quotes remain drafts. Native Revenue Cloud and managed-package CPQ objects, product options, pricing procedures and subscription history need mapping. [Export steps and limitations](docs/replace-salesforce-revenue-cloud.md).
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## What the free version covers
 
-## Contributing
+Catalogue quoting with direct required-component rules, integer quantities, one currency per pricebook and one tax rate per quote. It does not implement the whole Revenue Cloud suite: subscriptions, usage rating, invoices, payments and signatures stay with the systems responsible for those jobs. Enterprise DNA scopes the connections, quoting screens and additional rules you need. [Why no front end](docs/why-no-front-end.md).
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+The base runs as a trusted operator. Actor labels are not authenticated signatures. Shared operation needs identities, permissions, backup recovery and approval authority rules. Real records and generated output are ignored by Git. No command sends, signs, charges, deletes or records customer acceptance.
 
-## Want it installed and run for you?
+## Verification
 
-Enterprise DNA installs Product Quotes for Claude Code for your business, migrates your Salesforce Revenue Cloud data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+npm test runs all 32 CLI commands against a temporary database. It asserts exact totals, repeated migrations and seeds, approval invalidation, frozen issued quotes, snapshots, required components, failed-import rollback, changed-source detection, currency handling and escaped documents. GitHub checks run the same suite on Linux, Windows and disposable Postgres. TEST_DATABASE_URL must point to an empty disposable database, never production.
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=salesforce-revenue-cloud)
-- Read more: [enterprisedna.co/omni/instead-of/salesforce-revenue-cloud](https://enterprisedna.co/omni/instead-of/salesforce-revenue-cloud?utm_source=github&utm_medium=readme&utm_campaign=salesforce-revenue-cloud)
-
-## License
-
-MIT. Copyright (c) 2026 Enterprise DNA.
+MIT licensed. Not affiliated with Salesforce or Anthropic. Hosting and agent usage have their own costs. [Book 30 minutes with Sam](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=salesforce-revenue-cloud&utm_source=github&utm_medium=readme).
