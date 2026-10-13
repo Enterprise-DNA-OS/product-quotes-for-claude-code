@@ -5,7 +5,7 @@
     "sections": [
       {
         "title": "Needs attention",
-        "sql": "select * from quote_attention order by name"
+        "sql": "select name,owner,currency,total_cents,expires,stale,discount_review,bundle_gaps from quote_attention order by name"
       },
       {
         "title": "Discount decisions",

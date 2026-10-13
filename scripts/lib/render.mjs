@@ -27,6 +27,7 @@ export function table(rows, columns = null) {
 
 function fmt(v, key, row) {
   if (v === null || v === undefined) return '';
+  if (typeof v === 'boolean') return v ? 'Yes' : 'No';
   if (v instanceof Date) return v.toISOString().replace('T', ' ').replace('.000Z', ' UTC');
   if (key.endsWith('_bps')) return `${(Number(v) / 100).toFixed(2)}%`;
   if (key.endsWith('_cents')) return `${row.currency || ''} ${(Number(v) / 100).toFixed(2)}`.trim();
