@@ -32,6 +32,7 @@ Every quote edit invalidates approval. Issued quotes require revise before chang
 | bundle rule | /bundle-rule |
 | new quote | /new-quote |
 | add line | /add-line |
+| quantity | /quantity |
 | discount | /discount |
 | terms | /terms |
 | approve | /approve |

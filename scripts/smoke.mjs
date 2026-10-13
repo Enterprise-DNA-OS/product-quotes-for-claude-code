@@ -45,6 +45,11 @@ try{
  await call('terms',fresh.id,'--terms=Delivery included','--tax-bps=1500','--tax-note=Standard GST included','--expires=2099-12-31',actor);
  await call('cost-review',fresh.id,'--product=TEST','--cost-cents=1200','--reason=Supplier confirmed NZD cost',actor);
  assert.equal(Number((await call('quote',fresh.id)).quote.total_cents),6897);
+ await call('approve',fresh.id,actor,'--reason=Ready');
+ await call('quantity',fresh.id,'--product=TEST','--quantity=4',actor);
+ assert.equal(Number((await call('quote',fresh.id)).quote.total_cents),9195);
+ assert.equal((await call('quote',fresh.id)).quote.status,'draft');
+ await assert.rejects(()=>call('quantity',fresh.id,'--product=TEST','--quantity=0',actor),/integer/);
  await call('set-price','TEST','--book=Test prices','--unit-cents=2500',actor);
  assert.equal(Number((await call('quote',fresh.id)).lines[0].unit_cents),1999);
  assert.equal((await call('price-drift')).length,1);

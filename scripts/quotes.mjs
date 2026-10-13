@@ -33,6 +33,7 @@ const syntax={
  'bundle-rule':'<product> --requires= --ratio= --actor=',
  'new-quote':'--name= --customer= --owner= --book= --expires=YYYY-MM-DD --actor=',
  'add-line':'<quote> --product= --quantity= --actor=',
+ 'quantity':'<quote> --product= --quantity= --actor=',
  'discount':'<quote> --product= --bps= --actor=',
  'terms':'<quote> --terms= --tax-bps= --tax-note= --expires=YYYY-MM-DD --actor=',
  'approve':'<quote> --reason= --actor=',
@@ -105,11 +106,12 @@ export async function run(db,argv){
  else if(cmd==='new-quote'){const b=await resolve(db,'pricebooks',required(o,'book'));if(!b.active)throw Error('Inactive pricebook');out=(await db.query('insert into quotes(name,customer,owner,pricebook_id,expires) values($1,$2,$3,$4,$5) returning id,name',[required(o,'name'),required(o,'customer'),required(o,'owner'),b.id,date(required(o,'expires'))]))[0];await audit(db,out.id,actor,cmd,'Draft created');}
  else{
  const q=await lock(db,reference);
- if(['add-line','discount','terms','revise','cost-review'].includes(cmd)){
+ if(['add-line','quantity','discount','terms','revise','cost-review'].includes(cmd)){
  if(cmd!=='revise')editable(q);
  await audit(db,q.id,actor,'revision-snapshot',JSON.stringify(await detail(db,q.id)));
  if(cmd==='cost-review'){const p=await resolve(db,'products',required(o,'product'));required(o,'reason');const found=await db.query('update quote_lines set cost_cents=$1 where quote_id=$2 and product_id=$3 returning id',[integer(required(o,'cost-cents'),'cost'),q.id,p.id]);if(!found.length)throw Error('Product is not on quote');}
  if(cmd==='add-line'){const p=await resolve(db,'products',required(o,'product'));const e=(await db.query('select e.*,b.currency from prices e join pricebooks b on b.id=e.pricebook_id where e.product_id=$1 and e.pricebook_id=$2 and e.active and b.active',[p.id,q.pricebook_id]))[0];if(!p.active||!e)throw Error('Active product price required in quote pricebook');await db.query('insert into quote_lines(quote_id,product_id,quantity,unit_cents,cost_cents) values($1,$2,$3,$4,$5)',[q.id,p.id,integer(required(o,'quantity'),'quantity',1,1000000),e.unit_cents,p.cost_currency===e.currency?p.cost_cents:null]);}
+ if(cmd==='quantity'){const p=await resolve(db,'products',required(o,'product'));const rows=await db.query('update quote_lines set quantity=$1 where quote_id=$2 and product_id=$3 returning id',[integer(required(o,'quantity'),'quantity',1,1000000),q.id,p.id]);if(!rows.length)throw Error('Product is not on this quote');}
  if(cmd==='discount'){const p=await resolve(db,'products',required(o,'product'));const rows=await db.query('update quote_lines set discount_bps=$1 where quote_id=$2 and product_id=$3 returning id',[integer(required(o,'bps'),'discount bps',0,10000),q.id,p.id]);if(!rows.length)throw Error('Product is not on this quote');}
  if(cmd==='terms')await db.query('update quotes set terms=$1,tax_bps=$2,tax_note=$3,expires=$4 where id=$5',[required(o,'terms'),integer(required(o,'tax-bps'),'tax bps',0,10000),required(o,'tax-note'),date(required(o,'expires')),q.id]);
  if(cmd==='revise'){

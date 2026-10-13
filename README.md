@@ -30,7 +30,7 @@ Open the folder in your coding agent and ask for /weekly-review. PGlite stores l
 
 Maintain the pricebook, check product bundles, review discounts, prepare quote drafts and follow up before expiry. The fictional Harbour demo includes an expired quote, a missing commissioning component, stale customer contact, a discount needing review and a clean quote ready for approval. Seed dates are relative to the first run; reseeding preserves changes.
 
-The database has nine record sets and four read-only views. The CLI has 32 commands, including help, and .claude/commands has 33 recipes. [Complete syntax](docs/cli.md).
+The database has nine record sets and four read-only views. The CLI has 33 commands, including help, and .claude/commands has 34 recipes. [Complete syntax](docs/cli.md).
 
 ## Ten questions for your quote meeting
 
@@ -83,6 +83,6 @@ The base runs as a trusted operator. Actor labels are not authenticated signatur
 
 ## Verification
 
-npm test runs all 32 CLI commands against a temporary database. It asserts exact totals, repeated migrations and seeds, approval invalidation, frozen issued quotes, snapshots, required components, failed-import rollback, changed-source detection, currency handling and escaped documents. GitHub checks run the same suite on Linux, Windows and disposable Postgres. TEST_DATABASE_URL must point to an empty disposable database, never production.
+npm test runs all 33 CLI commands against a temporary database. It asserts exact totals, repeated migrations and seeds, approval invalidation, frozen issued quotes, snapshots, required components, failed-import rollback, changed-source detection, currency handling and escaped documents. GitHub checks run the same suite on Linux, Windows and disposable Postgres. TEST_DATABASE_URL must point to an empty disposable database, never production.
 
 MIT licensed. Not affiliated with Salesforce or Anthropic. Hosting and agent usage have their own costs. [Book 30 minutes with Sam](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=salesforce-revenue-cloud&utm_source=github&utm_medium=readme).
